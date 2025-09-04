@@ -1,0 +1,84 @@
+-- Custom keybind system for Useful Idiots mod
+-- This system provides configurable keybinds when MCM is not available
+
+-- Keybind definitions
+-- Using kCUSTOM18 as default for companion menu toggle (same as current)
+local keybinds = {
+    ["idiots_toggle_menu"] = "kCUSTOM18"
+}
+
+-- Action functions
+local action = {}
+
+-- Toggle companion menu
+function action.idiots_toggle_menu(p)
+    if p == 1 then  -- Key pressed
+        -- Access the openUI function from the global idiots_ui table
+        if _G.idiots_ui and _G.idiots_ui.openUI then
+            _G.idiots_ui.openUI()
+        end
+    end
+end
+
+-- Key event handlers
+function on_key_press(key)
+    for k, v in pairs(keybinds) do 
+        if action[k] then 
+            if key_bindings[v] then 
+                if key_bindings[v] == dik_to_bind(key) then 
+                    action[k](1)
+                end
+            end
+        end
+    end 
+end
+
+function on_key_release(key)
+    for k, v in pairs(keybinds) do 
+        if action[k] then 
+            if key_bindings[v] then 
+                if key_bindings[v] == dik_to_bind(key) then 
+                    action[k](0)
+                end
+            end
+        end
+    end 
+end
+
+function on_key_hold(key)
+    for k, v in pairs(keybinds) do 
+        if action[k] then 
+            if key_bindings[v] then 
+                if key_bindings[v] == dik_to_bind(key) then 
+                    action[k](2)
+                end
+            end
+        end
+    end 
+end
+
+-- Check if MCM is available
+local mcm_available = false
+function check_mcm_available()
+  -- Try to access MCM functions to see if they're available
+  if ui_mcm and type(ui_mcm.get) == "function" then
+    -- Test with a known key - use pcall to handle any errors
+    local success, test_value = pcall(ui_mcm.get, "idiots/options/splitSquads")
+    mcm_available = success and test_value ~= nil
+  else
+    mcm_available = false
+  end
+  return mcm_available
+end
+
+-- Initialization
+function on_game_start()
+    check_mcm_available()
+
+    -- Only register our custom keybinds if MCM is not available
+    if not mcm_available then
+        RegisterScriptCallback("on_key_press", on_key_press)
+        RegisterScriptCallback("on_key_release", on_key_release)
+        RegisterScriptCallback("on_key_hold", on_key_hold)
+    end
+end

@@ -424,13 +424,38 @@ end
 
 function onKeyRelease(key)
   if (dik_to_bind(key) == key_bindings.kCUSTOM18) then
-    UI.openUI()
+    -- Use the same approach as the custom keybind system
+    if _G.idiots_ui and _G.idiots_ui.openUI then
+      _G.idiots_ui.openUI()
+    end
   end
 end
 
 
+-- Check if MCM is available
+local mcm_available = false
+function check_mcm_available()
+  -- Try to access MCM functions to see if they're available
+  if ui_mcm and type(ui_mcm.get) == "function" then
+    -- Test with a known key - use pcall to handle any errors
+    local success, test_value = pcall(ui_mcm.get, "idiots/options/splitSquads")
+    mcm_available = success and test_value ~= nil
+  else
+    mcm_available = false
+  end
+  return mcm_available
+end
+
+
 function on_game_start()
-  RegisterScriptCallback("on_key_release", onKeyRelease)
+  check_mcm_available()
+
+  -- Only register the hardcoded keybind if MCM is available
+  -- When MCM is not available, the custom keybind system will handle it
+  if mcm_available then
+    RegisterScriptCallback("on_key_release", onKeyRelease)
+  end
+
   RegisterScriptCallback("idiots_on_use_button", playVoiceover)
 
   RegisterScriptCallback("on_key_press", function(dik)
