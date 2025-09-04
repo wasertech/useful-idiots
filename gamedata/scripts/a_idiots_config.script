@@ -35,3 +35,106 @@ DATA_STALE_KEYS = {
   "ZCDS_SHARING_NPCS",
   "CDHTS_STATES",
 }
+
+
+-- CONFIG DEFAULTS --
+local CONFIG_DEFAULTS = {
+  -- General options
+  ["idiots/options/splitSquads"] = true,
+  ["idiots/options/autoSneak"] = true,
+  ["idiots/options/autoProne"] = true,
+  ["idiots/options/autoSprint"] = true,
+  ["idiots/options/autoLight"] = true,
+  ["idiots/options/autoWait"] = false,
+  ["idiots/options/autoGuard"] = false,
+  ["idiots/options/autoDeselect"] = true,
+  ["idiots/options/autoReloadAll"] = false,
+  ["idiots/options/manualReloadAll"] = false,
+  ["idiots/options/defendMode"] = "actor",
+  ["idiots/options/camperCombat"] = false,
+  ["idiots/options/monolithCombat"] = false,
+  ["idiots/options/zombiedCombat"] = false,
+  ["idiots/options/dynamicSurgeCover"] = "both",
+  ["idiots/options/surgesKillCompanions"] = not isGAMMA,
+  ["idiots/options/noNpcLooting"] = isGAMMA,
+  ["idiots/options/artifacts"] = false,
+  ["idiots/options/showAllItems"] = false,
+  
+  -- UI options
+  ["idiots/ui/indexers"] = true,
+  ["idiots/ui/showReload"] = false,
+  ["idiots/ui/showRetreat"] = false,
+  ["idiots/ui/showUnstick"] = false,
+  ["idiots/ui/showTooltips"] = true,
+  ["idiots/ui/scaleX"] = 1,
+  ["idiots/ui/scaleY"] = 1,
+  ["idiots/ui/offsetX"] = 0,
+  ["idiots/ui/offsetY"] = 0,
+  ["idiots/ui/alpha"] = 208,
+  ["idiots/ui/scheme"] = "faction",
+  ["idiots/ui/font"] = "2",
+  
+  -- Keybind defaults (from ANOMALY_KEYBINDS)
+  ["idiots/keybinds/cycle_movement_key"] = 80,
+  ["idiots/keybinds/cycle_movement_mod"] = 0,
+  ["idiots/keybinds/cycle_movement_mode"] = 0,
+  ["idiots/keybinds/cycle_stance_key"] = 75,
+  ["idiots/keybinds/cycle_stance_mod"] = 0,
+  ["idiots/keybinds/cycle_stance_mode"] = 0,
+  ["idiots/keybinds/cycle_readiness_key"] = 79,
+  ["idiots/keybinds/cycle_readiness_mod"] = 0,
+  ["idiots/keybinds/cycle_readiness_mode"] = 0,
+  ["idiots/keybinds/loot_corpses_key"] = 76,
+  ["idiots/keybinds/loot_corpses_mod"] = 0,
+  ["idiots/keybinds/loot_corpses_mode"] = 0,
+  ["idiots/keybinds/loot_corpses_toggle"] = true,
+  
+  -- Point keybinds
+  ["idiots/keybinds/select_key"] = 0,
+  ["idiots/keybinds/select_mod"] = 0,
+  ["idiots/keybinds/select_mode"] = 0,
+  ["idiots/keybinds/deselect_key"] = 0,
+  ["idiots/keybinds/deselect_mod"] = 0,
+  ["idiots/keybinds/deselect_mode"] = 0,
+  ["idiots/keybinds/move_key"] = 81,
+  ["idiots/keybinds/move_mod"] = 0,
+  ["idiots/keybinds/move_mode"] = 0,
+  ["idiots/keybinds/look_key"] = 0,
+  ["idiots/keybinds/look_mod"] = 0,
+  ["idiots/keybinds/look_mode"] = 0,
+  ["idiots/keybinds/away_key"] = 0,
+  ["idiots/keybinds/away_mod"] = 0,
+  ["idiots/keybinds/away_mode"] = 0,
+  ["idiots/keybinds/addWaypoint_key"] = 0,
+  ["idiots/keybinds/addWaypoint_mod"] = 0,
+  ["idiots/keybinds/addWaypoint_mode"] = 0,
+  ["idiots/keybinds/clearWaypoints_key"] = 0,
+  ["idiots/keybinds/clearWaypoints_mod"] = 0,
+  ["idiots/keybinds/clearWaypoints_mode"] = 0,
+  ["idiots/keybinds/inventory_key"] = 0,
+  ["idiots/keybinds/inventory_mod"] = 0,
+  ["idiots/keybinds/inventory_mode"] = 0,
+  ["idiots/keybinds/reload_key"] = 0,
+  ["idiots/keybinds/reload_mod"] = 0,
+  ["idiots/keybinds/reload_mode"] = 0,
+  ["idiots/keybinds/reset_key"] = 0,
+  ["idiots/keybinds/reset_mod"] = 0,
+  ["idiots/keybinds/reset_mode"] = 0,
+  ["idiots/keybinds/retreat_key"] = 0,
+  ["idiots/keybinds/retreat_mod"] = 0,
+  ["idiots/keybinds/retreat_mode"] = 0,
+}
+
+
+-- CONFIG GETTER --
+function getConfigValue(key)
+  local value = ui_mcm.get(key)
+  if value ~= nil then
+    return value
+  end
+  return CONFIG_DEFAULTS[key]
+end
+
+
+-- EXPORTS --
+_G.getConfigValue = getConfigValue

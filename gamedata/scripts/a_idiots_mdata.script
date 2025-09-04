@@ -7,9 +7,9 @@ local BEH    = require "illish.lib.beh"
 -- reconfigure on MCM changes
 function reconfigureStates()
   -- legacy combat disabled
-  local camperCombat   = ui_mcm.get("idiots/options/camperCombat")
-  local monolithCombat = ui_mcm.get("idiots/options/monolithCombat")
-  local zombiedCombat  = ui_mcm.get("idiots/options/zombiedCombat")
+  local camperCombat   = CONFIG.getConfigValue("idiots/options/camperCombat")
+  local monolithCombat = CONFIG.getConfigValue("idiots/options/monolithCombat")
+  local zombiedCombat  = CONFIG.getConfigValue("idiots/options/zombiedCombat")
 
   local gstate = NPC.getActiveState(nil, "combat")
 
@@ -34,7 +34,7 @@ function reconfigureStates()
   end
 
   -- artifact gathering disabled
-  if not ui_mcm.get("idiots/options/artifacts") then
+  if not CONFIG.getConfigValue("idiots/options/artifacts") then
     NPC.setState(nil, "jobs", "loot_artifacts", false)
 
     for i, npc in ipairs(NPC.getCompanions()) do
@@ -100,9 +100,9 @@ function onLoadState(mdata)
   end
 
   -- legacy combat disabled
-  local camperCombat   = ui_mcm.get("idiots/options/camperCombat")
-  local monolithCombat = ui_mcm.get("idiots/options/monolithCombat")
-  local zombiedCombat  = ui_mcm.get("idiots/options/zombiedCombat")
+  local camperCombat   = CONFIG.getConfigValue("idiots/options/camperCombat")
+  local monolithCombat = CONFIG.getConfigValue("idiots/options/monolithCombat")
+  local zombiedCombat  = CONFIG.getConfigValue("idiots/options/zombiedCombat")
 
   local gstate = NPC.getActiveState(nil, "combat")
 
@@ -115,7 +115,7 @@ function onLoadState(mdata)
   end
 
   -- artifact gathering disabled
-  if not ui_mcm.get("idiots/options/artifacts") then
+  if not CONFIG.getConfigValue("idiots/options/artifacts") then
     NPC.setState(nil, "jobs", "loot_artifacts", false)
   end
 end
@@ -166,9 +166,9 @@ function onNpcSpawn(npc)
   BEH.loadStorage(npc:id(), data.beh)
 
   -- legacy combat disabled
-  local camperCombat   = ui_mcm.get("idiots/options/camperCombat")
-  local monolithCombat = ui_mcm.get("idiots/options/monolithCombat")
-  local zombiedCombat  = ui_mcm.get("idiots/options/zombiedCombat")
+  local camperCombat   = CONFIG.getConfigValue("idiots/options/camperCombat")
+  local monolithCombat = CONFIG.getConfigValue("idiots/options/monolithCombat")
+  local zombiedCombat  = CONFIG.getConfigValue("idiots/options/zombiedCombat")
 
   local state = NPC.getActiveState(npc, "combat")
 
@@ -181,7 +181,7 @@ function onNpcSpawn(npc)
   end
 
   -- artifact gathering disabled
-  if not ui_mcm.get("idiots/options/artifacts") then
+  if not CONFIG.getConfigValue("idiots/options/artifacts") then
     NPC.setState(npc, "jobs", "loot_artifacts", false)
   end
 

@@ -365,7 +365,7 @@ end
 function getFont(XML, el)
   local fontSize = XML:getNearestAttr(el, "fontSize")
   local font     = XML:getNearestAttr(el, "font")
-  local baseSize = ui_mcm.get("idiots/ui/font")
+  local baseSize = CONFIG.getConfigValue("idiots/ui/font")
 
   if fontSize and baseSize then
     font = FONTS[math.max(1, math.min(baseSize + fontSize, #FONTS))]
@@ -635,19 +635,19 @@ function onReadHUDXML(name, XML)
   end
 
   local config = {
-    camperCombat   = ui_mcm.get("idiots/options/camperCombat"),
-    monolithCombat = ui_mcm.get("idiots/options/monolithCombat"),
-    zombiedCombat  = ui_mcm.get("idiots/options/zombiedCombat"),
-    artifacts      = ui_mcm.get("idiots/options/artifacts"),
-    unstick        = ui_mcm.get("idiots/ui/showUnstick"),
-    reload         = ui_mcm.get("idiots/ui/showReload"),
-    retreat        = ui_mcm.get("idiots/ui/showRetreat"),
-    scaleX         = ui_mcm.get("idiots/ui/scaleX"),
-    scaleY         = ui_mcm.get("idiots/ui/scaleY"),
-    offsetX        = ui_mcm.get("idiots/ui/offsetX"),
-    offsetY        = ui_mcm.get("idiots/ui/offsetY"),
-    alpha          = ui_mcm.get("idiots/ui/alpha"),
-    font           = ui_mcm.get("idiots/ui/font"),
+    camperCombat   = CONFIG.getConfigValue("idiots/options/camperCombat"),
+    monolithCombat = CONFIG.getConfigValue("idiots/options/monolithCombat"),
+    zombiedCombat  = CONFIG.getConfigValue("idiots/options/zombiedCombat"),
+    artifacts      = CONFIG.getConfigValue("idiots/options/artifacts"),
+    unstick        = CONFIG.getConfigValue("idiots/ui/showUnstick"),
+    reload         = CONFIG.getConfigValue("idiots/ui/showReload"),
+    retreat        = CONFIG.getConfigValue("idiots/ui/showRetreat"),
+    scaleX         = CONFIG.getConfigValue("idiots/ui/scaleX"),
+    scaleY         = CONFIG.getConfigValue("idiots/ui/scaleY"),
+    offsetX        = CONFIG.getConfigValue("idiots/ui/offsetX"),
+    offsetY        = CONFIG.getConfigValue("idiots/ui/offsetY"),
+    alpha          = CONFIG.getConfigValue("idiots/ui/alpha"),
+    font           = CONFIG.getConfigValue("idiots/ui/font"),
   }
 
   DXML.extendXMLObject(XML)

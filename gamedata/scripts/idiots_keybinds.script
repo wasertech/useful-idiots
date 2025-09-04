@@ -2,6 +2,7 @@ local UI  = idiots_ui
 local WPN = require "illish.lib.weapon"
 local NPC = require "illish.lib.npc"
 local BEH = require "illish.lib.beh"
+local CONFIG = a_idiots_config
 
 
 local flash = particles_object("_samples_particles_\\flash_light")
@@ -127,8 +128,8 @@ function onKeybindEvent(event, dik)
   end
 
   if checkKeybind(event, dik, "point", "move") then
-    local autoWait  = ui_mcm.get("idiots/options/autoWait")
-    local autoGuard = ui_mcm.get("idiots/options/autoGuard")
+    local autoWait  = CONFIG.getConfigValue("idiots/options/autoWait")
+    local autoGuard = CONFIG.getConfigValue("idiots/options/autoGuard")
 
     local npcs = #selected > 0 and selected or companions
     local pos  = level.get_target_pos()
@@ -161,7 +162,7 @@ function onKeybindEvent(event, dik)
       else showMessage("st_idiots_move_all_point_message")
     end
 
-    if ui_mcm.get("idiots/options/autoDeselect") then
+    if CONFIG.getConfigValue("idiots/options/autoDeselect") then
       NPC.SELECTED_IDS = {}
     end
 
@@ -186,7 +187,7 @@ function onKeybindEvent(event, dik)
       end
     end
 
-    if ui_mcm.get("idiots/options/autoDeselect") then
+    if CONFIG.getConfigValue("idiots/options/autoDeselect") then
       NPC.SELECTED_IDS = {}
     end
 
@@ -259,7 +260,7 @@ function onKeybindEvent(event, dik)
   if checkKeybind(event, dik, "point", "reload") then
     local npcs = #selected > 0 and selected or companions
 
-    local wmode = ui_mcm.get("idiots/options/manualReloadAll")
+    local wmode = CONFIG.getConfigValue("idiots/options/manualReloadAll")
       and WPN.RELOAD_ALL
       or  WPN.RELOAD_ACTIVE
 
@@ -314,9 +315,9 @@ function checkKeybind(event, dik, group, action)
   local uuid    = "idiots"
   local kformat = "idiots/keybinds/%s/%s_%s"
 
-  local key  = ui_mcm.get(kformat:format(group, action, "key"))
-  local mod  = ui_mcm.get(kformat:format(group, action, "mod"))
-  local mode = ui_mcm.get(kformat:format(group, action, "mode"))
+  local key  = CONFIG.getConfigValue(kformat:format(group, action, "key"))
+  local mod  = CONFIG.getConfigValue(kformat:format(group, action, "mod"))
+  local mode = CONFIG.getConfigValue(kformat:format(group, action, "mode"))
 
   if not (key and key > 0 and key == dik and ui_mcm.get_mod_key(mod)) then
     return false
@@ -365,7 +366,7 @@ function checkKeybind(event, dik, group, action)
   end
 
   if group == "jobs" then
-    local artifacts = ui_mcm.get("idiots/options/artifacts")
+    local artifacts = CONFIG.getConfigValue("idiots/options/artifacts")
 
     if action == "artifacts" and not artifacts then
       return true
@@ -387,7 +388,7 @@ function checkKeybind(event, dik, group, action)
   local toggleableGroup = NPC.ACTIONS_KEYED[group].toggle
 
   local toggleableAction = toggleableGroup
-    and ui_mcm.get(kformat:format(group, action, "toggle"))
+    and CONFIG.getConfigValue(kformat:format(group, action, "toggle"))
 
   local nextState
 
