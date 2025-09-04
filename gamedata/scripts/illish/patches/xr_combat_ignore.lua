@@ -1,4 +1,14 @@
-local NPC = require "illish.lib.npc"
+local safe_require = function(lib)
+  local ok, result = pcall(require, lib)
+  if not ok then
+    printf("[useful-idiots] Error: missing required library '%s'. Mod will not load.", lib)
+    return nil
+  end
+  return result
+end
+
+local NPC = safe_require("illish.lib.npc")
+if not NPC then return end
 
 
 local PATCH  = {}

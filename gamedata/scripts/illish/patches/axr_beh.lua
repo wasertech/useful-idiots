@@ -7,6 +7,13 @@ local WPN  = require "illish.lib.weapon"
 
 local PATCH = {}
 
+-- Vérification des dépendances Anomaly
+local anomaly_missing = false
+if not xr_logic or not db then
+  anomaly_missing = true
+  printf("[useful-idiots] Error: Anomaly scripts missing (xr_logic or db). Some functions are disabled.")
+end
+
 -- Additional targets added by Useful Idiots to beh_companion.ltx and the
 -- corresponding functions for their behavior.
 PATCH.CUSTOM_TARGETS = {
@@ -52,13 +59,13 @@ local PATCH_set_desired_target = axr_beh.action_beh.set_desired_target
 function axr_beh.action_beh:set_desired_target()
   local npc = self.object
   local st  = self.st
-
-  if not NPC.isCompanion(npc) then
+  if anomaly_missing or not NPC.isCompanion(npc) then
     return PATCH_set_desired_target(self)
   end
-
-  local target = xr_logic.pick_section_from_condlist(db.actor, npc, st.goto_target)
-
+  local target = nil
+  if not anomaly_missing then
+    target = xr_logic.pick_section_from_condlist(db.actor, npc, st.goto_target)
+  end
   -- Remember desired_target values between calls
   if st.target == target and st.desired_target then
     st.savedTarget = dup_table(st.desired_target)
@@ -67,23 +74,20 @@ function axr_beh.action_beh:set_desired_target()
     st.lookPoint   = nil
     st.savedTarget = {}
   end
-
   -- Retain previous values to detect changes
   st.lastTarget   = st.target
   st.lastKeepType = st.keepType
-
   -- Defer to original function first
   local success  = PATCH_set_desired_target(self)
   local targetFn = PATCH.CUSTOM_TARGETS[target]
-
   -- Run custom target function only if original did not match
   if success or not targetFn then
     return success
   end
-
   -- globally store this result for use in custom target functions
-  st.keepType = xr_logic.pick_section_from_condlist(db.actor, npc, st.keep_distance)
-
+  if not anomaly_missing then
+    st.keepType = xr_logic.pick_section_from_condlist(db.actor, npc, st.keep_distance)
+  end
   return targetFn(self)
 end
 

@@ -1,8 +1,18 @@
-local TABLE  = require "illish.lib.table"
-local NPC    = require "illish.lib.npc"
-local WPN    = require "illish.lib.weapon"
-local COMBAT = require "illish.lib.combat"
-local SURGE  = require "illish.lib.surge"
+local safe_require = function(lib)
+  local ok, result = pcall(require, lib)
+  if not ok then
+    printf("[useful-idiots] Error: missing required library '%s'. Mod will not load.", lib)
+    return nil
+  end
+  return result
+end
+
+local TABLE  = safe_require("illish.lib.table")
+local NPC    = safe_require("illish.lib.npc")
+local WPN    = safe_require("illish.lib.weapon")
+local COMBAT = safe_require("illish.lib.combat")
+local SURGE  = safe_require("illish.lib.surge")
+if not (TABLE and NPC and WPN and COMBAT and SURGE) then return end
 
 
 local PATCH = {}
