@@ -10,7 +10,7 @@ local COMBAT = {}
 local anomaly_missing = false
 if not axr_companions or not axr_task_manager then
   anomaly_missing = true
-  printf("[useful-idiots] Erreur : dépendances Anomaly manquantes (axr_companions ou axr_task_manager). Certaines fonctions compagnons sont désactivées.")
+  printf("[useful-idiots] Error: Missing Anomaly dependencies (axr_companions or axr_task_manager). Some companion functions are disabled.")
 end
 
 
