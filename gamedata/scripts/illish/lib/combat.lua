@@ -6,6 +6,13 @@ local NPC   = require "illish.lib.npc"
 
 local COMBAT = {}
 
+-- Vérification des dépendances Anomaly
+local anomaly_missing = false
+if not axr_companions or not axr_task_manager then
+  anomaly_missing = true
+  printf("[useful-idiots] Erreur : dépendances Anomaly manquantes (axr_companions ou axr_task_manager). Certaines fonctions compagnons sont désactivées.")
+end
+
 
 -- CONSTS --
   COMBAT.COMBAT_ANIMATIONS = {
@@ -99,16 +106,14 @@ local COMBAT = {}
 
 
   function COMBAT.teamSeesEnemy(npc, enemy)
-    if not NPC.isCompanion(npc) then
+    if anomaly_missing or not NPC.isCompanion(npc) then
       return COMBAT.squadSeesEnemy(npc, enemy)
     end
-
     for i, companion in ipairs(NPC.getCompanions()) do
-      if companion:see(enemy) then
+      if companion and companion.see and companion:see(enemy) then
         return true
       end
     end
-
     return false
   end
 

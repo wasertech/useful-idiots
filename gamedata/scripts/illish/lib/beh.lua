@@ -7,6 +7,13 @@ local NPC   = require "illish.lib.npc"
 
 local BEH = {}
 
+-- Vérification des dépendances Anomaly
+local anomaly_missing = false
+if not axr_companions or not axr_task_manager then
+  anomaly_missing = true
+  printf("[useful-idiots] Error: Missing Anomaly dependencies (axr_companions or axr_task_manager). Some companion functions are disabled.")
+end
+
 
 -- CONSTS --
   BEH.ANIMATIONS = {
@@ -361,10 +368,10 @@ local BEH = {}
 
 
   function BEH.getWaypoint(npc, index)
+    if anomaly_missing then return nil end
     if type(npc) == "number" then
       npc = NPC.getCompanion(npc)
     end
-
     if (npc and index) then
       return se_load_var(npc:id(), npc:name(), "pathpoint" .. index)
     end
@@ -372,10 +379,10 @@ local BEH = {}
 
 
   function BEH.getAllWaypoints(npc)
+    if anomaly_missing then return nil end
     if type(npc) == "number" then
       npc = NPC.getCompanion(npc)
     end
-
     if not npc then
       return
     end
@@ -748,14 +755,12 @@ local BEH = {}
     if not anim then
       local dist = VEC.distance(npc:position(), dt.position)
 
-      local walkDist = tonumber(
-        xr_logic.pick_section_from_condlist(db.actor, npc, st.walk_dist)
-        or 4
-      )
-      local jogDist = tonumber(
-        xr_logic.pick_section_from_condlist(db.actor, npc, st.jog_dist)
-        or 8
-      )
+      local walkDist = 4
+      local jogDist = 8
+      if not anomaly_missing and xr_logic and db and st then
+        walkDist = tonumber(xr_logic.pick_section_from_condlist(db.actor, npc, st.walk_dist) or 4)
+        jogDist = tonumber(xr_logic.pick_section_from_condlist(db.actor, npc, st.jog_dist) or 8)
+      end
 
       if dist <= walkDist
         then anim = st.walk_animation

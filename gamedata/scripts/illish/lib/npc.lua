@@ -7,6 +7,14 @@ local WPN   = require "illish.lib.weapon"
 
 local NPC = {}
 
+-- Vérification des dépendances Anomaly
+local anomaly_missing = false
+-- Checking Anomaly dependencies
+if not axr_companions or not axr_task_manager then
+  anomaly_missing = true
+  printf("[useful-idiots] Error: Missing Anomaly dependencies (axr_companions or axr_task_manager). The mod will not be loaded.")
+end
+
 
 -- Tracks looted/gathered items
 NPC.LOOT_SHARED_ITEMS = {}
@@ -277,11 +285,12 @@ NPC.LOOT_SHARING_NPCS = {}
 
 
 -- COMPANIONS --
+  -- Fonctions compagnons désactivées si Anomaly absent
   function NPC.isCompanion(npc)
+    if anomaly_missing then return false end
     if type(npc) == "number" then
       npc = NPC.get(npc)
     end
-
     return npc
       and not axr_task_manager.hostages_by_id[npc:id()]
       and npc:has_info("npcx_is_companion")
@@ -290,18 +299,17 @@ NPC.LOOT_SHARING_NPCS = {}
       or false
   end
 
-
   function NPC.getCompanion(id)
+    if anomaly_missing then return nil end
     local npc = NPC.get(id)
     return NPC.isCompanion(npc) and npc or nil
   end
 
-
   function NPC.indexOfCompanion(npc)
+    if anomaly_missing then return nil end
     if type(npc) == "number" then
       npc = NPC.get(npc)
     end
-
     if npc then
       return TABLE.keyof(NPC.getCompanions(), function(companion)
         return companion:id() == npc:id()
@@ -309,10 +317,9 @@ NPC.LOOT_SHARING_NPCS = {}
     end
   end
 
-
   function NPC.getCompanions()
+    if anomaly_missing then return {} end
     local companions = {}
-
     for id, squad in pairs(axr_companions.companion_squads) do
       if not (squad and squad.commander_id) then
         goto continue
@@ -320,33 +327,26 @@ NPC.LOOT_SHARING_NPCS = {}
       if axr_task_manager.hostages_by_id[squad:commander_id()] then
         goto continue
       end
-
       for member in squad:squad_members() do
         local companion = NPC.getCompanion(member.id)
-
         if companion then
           table.insert(companions, companion)
         end
       end
-
       ::continue::
     end
-
     table.sort(companions, function(a, b)
       return a:id() < b:id()
     end)
-
     return companions
   end
 
-
   function NPC.getTargetCompanion(maxDist)
+    if anomaly_missing then return nil end
     local npc = level.get_target_obj()
-
     if not NPC.isCompanion(npc) then
       return
     end
-
     if maxDist and distance_between(db.actor, npc) > maxDist then
       return
     end
